@@ -1,0 +1,112 @@
+/* PixelCart - Gaming Theme with existing design enhancement */
+
+:root {
+    /* Primary Colors */
+    --primary-cyan: #00d9ff;
+    --primary-green: #28a745;
+    --accent-purple: #9b59b6;
+
+    /* Dark Theme */
+    --bg-dark: #1a1a2e;
+    --bg-darker: #0f0f1e;
+    --card-bg: rgba(26, 26, 46, 0.9);
+    --border-color: rgba(0, 217, 255, 0.3);
+
+    /* Text */
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+}
+
+/* Custom Text Colors */
+.text-primary-custom {
+    color: var(--primary-cyan) !important;
+}
+
+/* Game Cards Enhancement */
+.game-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+}
+
+.game-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+    border-color: var(--primary-cyan);
+}
+
+.game-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.game-card:hover img {
+    transform: scale(1.1);
+}
+
+/* Buttons */
+.btn-add-to-cart {
+    background: linear-gradient(135deg, var(--primary-cyan), var(--accent-purple));
+    border: none;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-add-to-cart:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 217, 255, 0.4);
+}
+
+/* Navbar Styling */
+.navbar {
+    background: rgba(15, 15, 30, 0.95) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary-cyan) !important;
+}
+
+.nav-link {
+    color: var(--text-secondary) !important;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--primary-cyan) !important;
+}
+
+/* Cart Badge */
+.cart-count {
+    font-size: 0.75rem;
+    min-width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .game-card img {
+        height: 200px;
+    }
+}
