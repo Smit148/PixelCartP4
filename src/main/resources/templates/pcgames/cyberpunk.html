@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{base}">
+
+<head>
+    <meta charset="utf-8">
+    <title>Cyberpunk 2077 (PC) - PixelCart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .product-box {
+            background-color: #111;
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .product-image {
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .buy-btn {
+            border-radius: 12px;
+            padding: 12px 28px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div th:replace="~{fragment/navbar :: header}"></div>
+
+
+    <!-- PRODUCT SECTION -->
+    <div class="container my-5" layout:fragment="content">
+
+        <div class="product-box row align-items-center">
+
+            <div class="row g-4 align-items-center">
+
+                <!-- IMAGE -->
+                <div class="col-md-5">
+                    <div class="product-image">
+                        <img th:src="@{/images/cyberpunk.webp}" alt="Cyberpunk 2077">
+                    </div>
+                </div>
+
+                <!-- DESCRIPTION -->
+                <div class="col-md-7">
+                    <h2>Cyberpunk 2077</h2>
+                    <p class="text-secondary mt-3">
+                        Cyberpunk 2077 is an open-world, action-adventure RPG set in Night City,
+                        a megalopolis obsessed with power, glamour, and body modification.
+                    </p>
+
+                    <h4 class="text-success mt-4">₹2,999</h4>
+
+                    <ul class="list-unstyled text-secondary mt-3">
+                        <li>🎮 Platform: PC</li>
+                        <li>⭐ Rating: 4.5 / 5</li>
+                        <li>💾 Size: 70 GB</li>
+                    </ul>
+
+                    <!-- BUY BUTTON -->
+                    <div class="text-end mt-4">
+                        <button class="btn btn-add-to-cart w-100"
+                            onclick="addToCart({id: 'console-mario', name: 'Super Mario Odyssey', price: 3999, image: 'images/mario.jpg', category: 'Console Games'})">
+                            <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script>
+        // Add to cart functionality
+        document.querySelector('.buy-btn').addEventListener('click', function () {
+            const product = {
+                id: 'cyberpunk-pc',
+                name: 'Cyberpunk 2077',
+                price: 2999,
+                platform: 'PC',
+                image: '/images/cyberpunk.webp'
+            };
+            addToCart(product);
+            alert('Cyberpunk 2077 added to cart!');
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{base}">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${isEdit} ? 'Edit Product' : 'Add New Product'">Product Form</title>
+    <style>
+        .form-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .form-label {
+            color: #00d4ff;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-control,
+        .form-select {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background: rgba(0, 0, 0, 0.4);
+            border-color: #00d4ff;
+            color: white;
+            box-shadow: 0 0 0 0.2rem rgba(0, 212, 255, 0.25);
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-select option {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .btn-group-form {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-group-form .btn {
+            flex: 1;
+        }
+
+        .image-upload-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .image-preview {
+            max-width: 300px;
+            max-height: 200px;
+            margin-top: 10px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .image-preview.show {
+            display: block;
+        }
+
+        input[type="file"] {
+            padding: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div layout:fragment="content">
+        <section class="container my-5">
+            <div class="form-container">
+                <h2 class="text-primary-custom mb-4 text-center">
+                    <i class="fas" th:classappend="${isEdit} ? 'fa-edit' : 'fa-plus-circle'"></i>
+                    <span th:text="${isEdit} ? 'Edit Product' : 'Add New Product'">Product Form</span>
+                </h2>
+
+                <form th:action="@{/admin/product/save}" th:object="${product}" method="post"
+                    enctype="multipart/form-data">
+                    <!-- Hidden ID field for edit -->
+                    <input type="hidden" th:field="*{id}">
+
+                    <!-- Product Name -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Product Name *</label>
+                        <input type="text" class="form-control" id="name" th:field="*{name}"
+                            placeholder="Enter product name" required>
+                    </div>
+
+                    <!-- Category dropdown -->
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category *</label>
+                        <select class="form-select" id="category" th:field="*{category}" required>
+                            <option value="">Select Category</option>
+                            <option th:each="cat : ${categories}" th:value="${cat}" th:text="${cat}"></option>
+                        </select>
+                    </div>
+
+                    <!-- Small Description -->
+                    <div class="mb-3">
+                        <label for="smallDescription" class="form-label">Small Description *</label>
+                        <input type="text" class="form-control" id="smallDescription" th:field="*{smallDescription}"
+                            placeholder="Enter catchphrase/title" required>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Full Description</label>
+                        <textarea class="form-control" id="description" th:field="*{description}" rows="4"
+                            placeholder="Enter product description"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <!-- Selling Price -->
+                        <div class="col-md-6 mb-3">
+                            <label for="sellingPrice" class="form-label">Selling Price (₹) *</label>
+                            <input type="number" class="form-control" id="sellingPrice" th:field="*{sellingPrice}"
+                                placeholder="Enter original price" required>
+                        </div>
+
+                        <!-- Discounted Price -->
+                        <div class="col-md-6 mb-3">
+                            <label for="discountedPrice" class="form-label">Discounted Price (₹) *</label>
+                            <input type="number" class="form-control" id="discountedPrice" th:field="*{discountedPrice}"
+                                placeholder="Enter offer price" required>
+                        </div>
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div class="mb-3 image-upload-container">
+                        <label for="imageFile" class="form-label">Product Image</label>
+                        <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*"
+                            onchange="previewImage(event)">
+                        <small class="text-muted">Upload an image (Max 1MB recommended) - Leave empty to keep
+                            existing</small>
+                        <div class="mt-2 text-center">
+                            <img id="imagePreview" class="image-preview" alt="Image preview"
+                                th:src="${product.id != null} ? @{'/image/' + ${product.id}} : ''"
+                                th:classappend="${product.id != null} ? 'show' : ''">
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="btn-group-form">
+                        <button type="submit" class="btn btn-add-to-cart">
+                            <i class="fas fa-save me-2"></i>Save Product
+                        </button>
+                        <a th:href="@{/admin/dashboard}" class="btn btn-outline-light">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function previewImage(event) {
+            const preview = document.getElementById('imagePreview');
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.classList.add('show');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+
+</body>
+
+</html>

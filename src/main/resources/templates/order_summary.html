@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{base}">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Order Summary - PixelCart</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <section class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <!-- Order Success Message -->
+                    <div class="text-center mb-5">
+                        <div class="mb-4">
+                            <i class="fas fa-check-circle text-success" style="font-size: 5rem;"></i>
+                        </div>
+                        <h2 class="text-primary-custom mb-3">Order Placed Successfully!</h2>
+                        <p class="text-white-50">Thank you for your purchase. Your order has been confirmed.</p>
+                    </div>
+
+                    <!-- Order Details Card -->
+                    <div class="card bg-dark text-white border-secondary mb-4">
+                        <div class="card-header bg-gradient-custom">
+                            <h4 class="mb-0"><i class="fas fa-receipt me-2"></i>Order Summary</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <p class="text-white-50 mb-1">Order Number:</p>
+                                    <p class="fw-bold" id="orderNumber">-</p>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <p class="text-white-50 mb-1">Order Date:</p>
+                                    <p class="fw-bold" id="orderDate">-</p>
+                                </div>
+                            </div>
+
+                            <hr class="border-secondary">
+
+                            <!-- Order Items -->
+                            <h5 class="text-primary-custom mb-3">Items Ordered</h5>
+                            <div id="orderItems">
+                                <!-- Items will be populated by JavaScript -->
+                            </div>
+
+                            <hr class="border-secondary">
+
+                            <!-- Order Total -->
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4 class="mb-0">Total Amount:</h4>
+                                <h4 class="text-primary-custom mb-0" id="orderTotal">₹0</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Billing Information -->
+                    <div class="card bg-dark text-white border-secondary mb-4">
+                        <div class="card-header bg-gradient-custom">
+                            <h5 class="mb-0"><i class="fas fa-user me-2"></i>Billing Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="billingInfo">
+                                <!-- Billing info will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="text-center">
+                        <a href="/" class="btn btn-add-to-cart btn-lg me-3">
+                            <i class="fas fa-home me-2"></i>Back to Home
+                        </a>
+                        <button onclick="window.print()" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-print me-2"></i>Print Order
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Load order summary from sessionStorage
+        document.addEventListener('DOMContentLoaded', function () {
+            const orderData = sessionStorage.getItem('lastOrder');
+
+            if (!orderData) {
+                // No order data, redirect to home
+                window.location.href = '/';
+                return;
+            }
+
+            const order = JSON.parse(orderData);
+
+            // Set order number and date
+            document.getElementById('orderNumber').textContent = order.orderNumber;
+            document.getElementById('orderDate').textContent = order.orderDate;
+
+            // Populate order items
+            const orderItemsContainer = document.getElementById('orderItems');
+            let itemsHTML = '';
+            order.items.forEach(item => {
+                itemsHTML += `
+                    <div class="d-flex align-items-center mb-3 pb-3 border-bottom border-secondary">
+                        <img src="${item.image}" alt="${item.name}" style="width: 80px; height: 80px; object-fit: cover;" class="rounded me-3">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">${item.name}</h6>
+                            <p class="text-white-50 mb-0">Quantity: ${item.quantity}</p>
+                        </div>
+                        <div class="text-end">
+                            <p class="text-primary-custom fw-bold mb-0">₹${(item.price * item.quantity).toLocaleString()}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            orderItemsContainer.innerHTML = itemsHTML;
+
+            // Set total
+            document.getElementById('orderTotal').textContent = '₹' + order.total.toLocaleString();
+
+            // Populate billing info
+            const billingInfoContainer = document.getElementById('billingInfo');
+            billingInfoContainer.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <p class="text-white-50 mb-1">Full Name:</p>
+                        <p class="fw-bold">${order.billing.fullName}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <p class="text-white-50 mb-1">Email:</p>
+                        <p class="fw-bold">${order.billing.email}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <p class="text-white-50 mb-1">Phone:</p>
+                        <p class="fw-bold">${order.billing.phone}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <p class="text-white-50 mb-1">Address:</p>
+                        <p class="fw-bold">${order.billing.address}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <p class="text-white-50 mb-1">City:</p>
+                        <p class="fw-bold">${order.billing.city}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <p class="text-white-50 mb-1">Zip Code:</p>
+                        <p class="fw-bold">${order.billing.zip}</p>
+                    </div>
+                </div>
+            `;
+        });
+    </script>
+</body>
+
+</html>

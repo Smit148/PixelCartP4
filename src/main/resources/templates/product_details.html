@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{base}">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${product.name} + ' - PixelCart'">Product Details</title>
+    <style>
+        .product-image {
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #00d2ff;
+        }
+
+        .product-info-box {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .price-tag {
+            color: #00d2ff;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .stock-badge {
+            font-size: 0.9rem;
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <div class="container my-5" th:if="${product != null}">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item"><a th:href="@{/}" class="text-primary-custom">Home</a></li>
+                    <li class="breadcrumb-item">
+                        <a th:if="${product.category.name() == 'PC_GAMES'}" th:href="@{/pc-games}"
+                            class="text-primary-custom">PC Games</a>
+                        <a th:if="${product.category.name() == 'CONSOLE_GAMES'}" th:href="@{/console-games}"
+                            class="text-primary-custom">Console Games</a>
+                        <a th:if="${product.category.name() == 'GEAR'}" th:href="@{/gaming-gear}"
+                            class="text-primary-custom">Gaming Gear</a>
+                    </li>
+                    <li class="breadcrumb-item active text-white" aria-current="page" th:text="${product.name}">Product
+                        Name</li>
+                </ol>
+            </nav>
+
+            <div class="row g-5">
+                <!-- Product Image -->
+                <div class="col-md-6 text-center">
+                    <img th:src="@{'/image/' + ${product.id}}" class="product-image" th:alt="${product.name}"
+                        style="max-height: 500px; width: auto;">
+                </div>
+
+                <!-- Product Details -->
+                <div class="col-md-6">
+                    <div class="product-info-box text-white">
+                        <div class="mb-2">
+                            <span class="badge bg-secondary stock-badge" th:text="${product.category}">Category</span>
+                        </div>
+
+                        <h1 class="display-5 fw-bold mb-1" th:text="${product.name}">Product Name</h1>
+                        <h4 class="text-primary-custom mb-3" th:text="${product.smallDescription}">Small Description
+                        </h4>
+                        <p class="lead mb-4 text-white-50" th:text="${product.description}">Full product description.
+                        </p>
+
+                        <div class="mb-4">
+                            <p class="mb-0 text-white-50">Price</p>
+                            <div class="d-flex align-items-center">
+                                <span class="price-tag me-3">₹<span th:text="${product.discountedPrice}">0</span></span>
+                                <span class="text-muted text-decoration-line-through fs-4">₹<span
+                                        th:text="${product.sellingPrice}">0</span></span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-3 d-md-flex justify-content-md-start">
+                            <button class="btn btn-add-to-cart btn-lg px-5 py-3" th:data-id="${product.id}"
+                                th:data-name="${product.name}" th:data-price="${product.discountedPrice}"
+                                th:data-image="@{'/image/' + ${product.id}}" th:data-category="${product.category}"
+                                onclick="addToCart({
+                                    id: 'product-' + this.getAttribute('data-id'),
+                                    name: this.getAttribute('data-name'),
+                                    price: this.getAttribute('data-price'),
+                                    image: this.getAttribute('data-image'),
+                                    category: this.getAttribute('data-category')
+                                })">
+                                <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                            </button>
+                        </div>
+
+                        <div class="mt-4 pt-4 border-top border-secondary">
+                            <div class="row text-white-50">
+                                <div class="col-6 mb-3">
+                                    <i class="fas fa-shield-alt text-primary-custom me-2"></i>1 Year Warranty
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <i class="fas fa-truck text-primary-custom me-2"></i>Fast Delivery
+                                </div>
+                                <div class="col-6">
+                                    <i class="fas fa-undo text-primary-custom me-2"></i>7 Day Returns
+                                </div>
+                                <div class="col-6">
+                                    <i class="fas fa-headset text-primary-custom me-2"></i>24/7 Support
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- If product not found -->
+        <div class="container my-5 text-center text-white" th:unless="${product != null}">
+            <h2>Product Not Found</h2>
+            <p>Sorry, the product you are looking for does not exist or has been removed.</p>
+            <a th:href="@{/}" class="btn btn-primary-custom mt-3">Return to Home</a>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,31 @@
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand navbar-dark bg-dark" th:fragment="header">
+  <div class="container">
+    <a class="navbar-brand" th:href="@{/}">
+      <i class="fas fa-gamepad me-2"></i>PixelCart
+    </a>
+
+    <ul class="navbar-nav ms-auto align-items-center">
+      <li class="nav-item"><a class="nav-link" th:href="@{/pc-games}">PC Games</a></li>
+      <li class="nav-item"><a class="nav-link" th:href="@{/console-games}">Console Games</a></li>
+      <li class="nav-item"><a class="nav-link" th:href="@{/gear}">Gaming Gear</a></li>
+      <li class="nav-item"><a class="nav-link" th:href="@{/admin/dashboard}"><i class="fas fa-lock me-1"></i>Admin</a>
+      </li>
+
+      <li class="nav-item ms-3">
+        <a class="nav-link position-relative" th:href="@{/cart}">
+          <div class="cart-icon-wrapper">
+            <i class="fas fa-shopping-cart fa-lg"></i>
+            <span class="cart-count badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">0</span>
+          </div>
+        </a>
+      </li>
+
+      <li class="nav-item ms-2">
+        <a class="btn btn-outline-light btn-sm" th:href="@{/signin}">
+          <i class="fas fa-sign-in-alt me-1"></i>Sign In
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>

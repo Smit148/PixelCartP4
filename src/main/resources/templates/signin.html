@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{base}">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign In - PixelCart</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <div class="auth-container">
+            <div class="auth-card fade-in">
+                <div class="auth-header">
+                    <h2><i class="fas fa-gamepad me-2"></i>Welcome Back!</h2>
+                    <p>Sign in to your PixelCart account</p>
+                </div>
+
+                <form id="signinForm" onsubmit="return validateSignIn(event)">
+                    <div class="mb-3">
+                        <label for="signinEmail" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="signinEmail" placeholder="Enter your email"
+                            required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="signinPassword" class="form-label">Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" class="form-control" id="signinPassword"
+                                placeholder="Enter your password" required>
+                            <button type="button" class="password-toggle"
+                                onclick="togglePassword('signinPassword', 'toggleIcon1')">
+                                <i class="fas fa-eye" id="toggleIcon1"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="rememberMe">
+                        <label class="form-check-label text-light" for="rememberMe">
+                            Remember me
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary-custom w-100 mb-3">
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                    </button>
+
+                    <div class="text-center">
+                        <a href="#" class="auth-link small">Forgot Password?</a>
+                    </div>
+
+                    <div class="auth-divider">
+                        <span>Don't have an account?</span>
+                    </div>
+
+                    <div class="text-center">
+                        <a href="signup" class="auth-link">Create an Account</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+
+</html>
